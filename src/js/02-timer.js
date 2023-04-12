@@ -1,7 +1,12 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+
 const buttonEl = document.querySelector('button');
-const timetEl = document.querySelector('timer');
+const daysEl = document.querySelector('[data-days]');
+const hoursEl = document.querySelector('[data-hours]');
+const minutesEl = document.querySelector('[data-minutes]');
+const secondsEl = document.querySelector('[data-seconds]');
+let timerId = null;
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
@@ -34,9 +39,23 @@ flatpickr('#datetime-picker', {
     } else {
       buttonEl.removeAttribute('disabled', '');
       buttonEl.addEventListener('click', () => {
-        const timerId = setInterval();
-
-        // console.log(convertMs(new Date(selectedDates)));
+        timerId = setInterval(() => {
+          const addLeadingZero = value => String(value).padStart(2, '0');
+          const timeToNow = convertMs(new Date(selectedDates) - new Date());
+          console.log(timeToNow);
+          daysEl.textContent = addLeadingZero(timeToNow.days);
+          hoursEl.textContent = addLeadingZero(timeToNow.hours);
+          minutesEl.textContent = addLeadingZero(timeToNow.minutes);
+          secondsEl.textContent = addLeadingZero(timeToNow.seconds);
+          if (
+            daysEl.textContent === '00' &&
+            hoursEl.textContent === '00' &&
+            minutesEl.textContent === '00' &&
+            secondsEl.textContent === '00'
+          ) {
+            clearInterval(timerId);
+          }
+        }, 1000);
       });
     }
   },
