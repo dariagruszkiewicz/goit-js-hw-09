@@ -54,6 +54,7 @@ flatpickr('#datetime-picker', {
             secondsEl.textContent === '00'
           ) {
             clearInterval(timerId);
+            window.alert('Hooray!');
           }
         }, 1000);
       });
